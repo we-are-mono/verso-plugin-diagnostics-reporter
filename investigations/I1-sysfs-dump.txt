@@ -1,0 +1,94 @@
+2026-11-04T21:55:17Z
+mono,gateway-dk
+6.12.103
+DISTRIB_RELEASE='25.12.5'
+/sys/class/hwmon/hwmon0 name=0x0000000001afd000:00 label= of=/sys/firmware/devicetree/base/soc/fman@1a00000/mdio@fd000/ethernet-phy@0 dev=/sys/devices/platform/soc/1a00000.fman/1afd000.mdio/mdio_bus/0x0000000001afd000/0x0000000001afd000:00
+  temp1_input=44628 -r--r--r--
+/sys/class/hwmon/hwmon1 name=0x0000000001afd000:01 label= of=/sys/firmware/devicetree/base/soc/fman@1a00000/mdio@fd000/ethernet-phy@1 dev=/sys/devices/platform/soc/1a00000.fman/1afd000.mdio/mdio_bus/0x0000000001afd000/0x0000000001afd000:01
+  temp1_input=48882 -r--r--r--
+/sys/class/hwmon/hwmon10 name=sec_thermal label= of=/sys/devices/virtual/thermal/thermal_zone4/of_node dev=/sys/devices/virtual/thermal/thermal_zone4
+  temp1_input=44000 -r--r--r--
+/sys/class/hwmon/hwmon11 name=sfp_xfi0 label= of=/sys/firmware/devicetree/base/sfp-xfi0 dev=/sys/devices/platform/sfp-xfi0
+  curr1_input=42 -r--r--r--
+  curr1_label=bias -r--r--r--
+  in0_input=3299 -r--r--r--
+  in0_label=VCC -r--r--r--
+  power1_input=545 -r--r--r--
+  power1_label=TX_power -r--r--r--
+  power2_input=652 -r--r--r--
+  power2_label=RX_power -r--r--r--
+  temp1_input=47219 -r--r--r--
+  temp1_label=temperature -r--r--r--
+/sys/class/hwmon/hwmon12 name=sfp_xfi1 label= of=/sys/firmware/devicetree/base/sfp-xfi1 dev=/sys/devices/platform/sfp-xfi1
+  curr1_input=43 -r--r--r--
+  curr1_label=bias -r--r--r--
+  in0_input=3286 -r--r--r--
+  in0_label=VCC -r--r--r--
+  power1_input=672 -r--r--r--
+  power1_label=TX_power -r--r--r--
+  power2_input=520 -r--r--r--
+  power2_label=RX_power -r--r--r--
+  temp1_input=47180 -r--r--r--
+  temp1_label=temperature -r--r--r--
+/sys/class/hwmon/hwmon13 name=ina234 label=USB Power Delivery of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@0/power_sensor@40 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-12/12-0040
+  curr1_input=600 -r--r--r--
+  in0_input=1 -r--r--r--
+  in1_input=19942 -r--r--r--
+  power1_input=12480000 -r--r--r--
+/sys/class/hwmon/hwmon14 name=ina234 label=5V PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@0/power_sensor@41 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-12/12-0041
+  curr1_input=2200 -r--r--r--
+  in0_input=2 -r--r--r--
+  in1_input=4966 -r--r--r--
+  power1_input=11120000 -r--r--r--
+/sys/class/hwmon/hwmon15 name=ina234 label=1V Core PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@0/power_sensor@42 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-12/12-0042
+  curr1_input=4480 -r--r--r--
+  in0_input=4 -r--r--r--
+  in1_input=998 -r--r--r--
+  power1_input=4560000 -r--r--r--
+/sys/class/hwmon/hwmon16 name=ina234 label=1.2V DDR PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@0/power_sensor@43 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-12/12-0043
+  curr1_input=328 -r--r--r--
+  in0_input=2 -r--r--r--
+  in1_input=1178 -r--r--r--
+  power1_input=400000 -r--r--r--
+/sys/class/hwmon/hwmon17 name=ina234 label=1.35V SerDes PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@1/power_sensor@40 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-13/13-0040
+  curr1_input=344 -r--r--r--
+  in0_input=2 -r--r--r--
+  in1_input=1331 -r--r--r--
+  power1_input=464000 -r--r--r--
+/sys/class/hwmon/hwmon18 name=ina234 label=1.8V PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@1/power_sensor@41 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-13/13-0041
+  curr1_input=40 -r--r--r--
+  in0_input=0 -r--r--r--
+  in1_input=1792 -r--r--r--
+  power1_input=80000 -r--r--r--
+/sys/class/hwmon/hwmon19 name=ina234 label=2.5V DDR PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@1/power_sensor@42 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-13/13-0042
+  curr1_input=280 -r--r--r--
+  in0_input=1 -r--r--r--
+  in1_input=2458 -r--r--r--
+  power1_input=720000 -r--r--r--
+/sys/class/hwmon/hwmon2 name=0x0000000001afd000:02 label= of=/sys/firmware/devicetree/base/soc/fman@1a00000/mdio@fd000/ethernet-phy@2 dev=/sys/devices/platform/soc/1a00000.fman/1afd000.mdio/mdio_bus/0x0000000001afd000/0x0000000001afd000:02
+  temp1_input=47347 -r--r--r--
+/sys/class/hwmon/hwmon20 name=ina234 label=3.3V PSU of=/sys/firmware/devicetree/base/soc/i2c@21a0000/i2c-mux@70/i2c@1/power_sensor@43 dev=/sys/devices/platform/soc/21a0000.i2c/i2c-2/i2c-13/13-0043
+  curr1_input=1160 -r--r--r--
+  in0_input=1 -r--r--r--
+  in1_input=3302 -r--r--r--
+  power1_input=3920000 -r--r--r--
+/sys/class/hwmon/hwmon3 name=emc2305 label= of=/sys/firmware/devicetree/base/soc/i2c@2180000/i2c-mux@70/i2c@3/fan-controller@2e dev=/sys/devices/platform/soc/2180000.i2c/i2c-0/i2c-7/7-002e
+  fan1_input=2460 -r--r--r--
+  fan2_input=0 -r--r--r--
+  pwm1=76 -rw-r--r--
+  pwm2=76 -rw-r--r--
+/sys/class/hwmon/hwmon4 name=tmp431 label= of=/sys/firmware/devicetree/base/soc/i2c@2180000/i2c-mux@70/i2c@1/temp-sensor@4c dev=/sys/devices/platform/soc/2180000.i2c/i2c-0/i2c-5/5-004c
+  temp1_input=40500 -r--r--r--
+  temp2_input=47063 -r--r--r--
+/sys/class/hwmon/hwmon5 name=tmp431 label= of=/sys/firmware/devicetree/base/soc/i2c@2180000/i2c-mux@70/i2c@2/temp-sensor@4c dev=/sys/devices/platform/soc/2180000.i2c/i2c-0/i2c-6/6-004c
+  temp1_input=47438 -r--r--r--
+  temp2_input=0 -r--r--r--
+/sys/class/hwmon/hwmon6 name=ddr_thermal label= of=/sys/devices/virtual/thermal/thermal_zone0/of_node dev=/sys/devices/virtual/thermal/thermal_zone0
+  temp1_input=45000 -r--r--r--
+/sys/class/hwmon/hwmon7 name=serdes_thermal label= of=/sys/devices/virtual/thermal/thermal_zone1/of_node dev=/sys/devices/virtual/thermal/thermal_zone1
+  temp1_input=44000 -r--r--r--
+/sys/class/hwmon/hwmon8 name=fman_thermal label= of=/sys/devices/virtual/thermal/thermal_zone2/of_node dev=/sys/devices/virtual/thermal/thermal_zone2
+  temp1_input=46000 -r--r--r--
+/sys/class/hwmon/hwmon9 name=cluster_thermal label= of=/sys/devices/virtual/thermal/thermal_zone3/of_node dev=/sys/devices/virtual/thermal/thermal_zone3
+  temp1_input=45000 -r--r--r--
+eth0=e8:f6:d7:00:17:df

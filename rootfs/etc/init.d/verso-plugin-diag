@@ -1,0 +1,70 @@
+#!/bin/sh /etc/rc.common
+# SPDX-License-Identifier: GPL-2.0-only
+# SPDX-FileCopyrightText: 2026 Mono Technologies Inc.
+
+USE_PROCD=1
+START=94
+STOP=11
+
+ACCOUNT=verso-plugin-diag
+ACCOUNT_UID=6100
+DIR=/var/run/verso-plugin-diag
+
+# account adds the plugin's own account (ADR-007). The shell talks to the
+# socket only when the kernel reports this account behind it, so the UID must
+# be no other account's: two accounts on one UID could write in each other's
+# socket directory.
+account() {
+	grep -q "^$ACCOUNT:" /etc/passwd && return 0
+	if awk -F: -v uid="$ACCOUNT_UID" '$3 == uid { found = 1 } END { exit !found }' /etc/passwd; then
+		# To the system log too: apk's post-install hides this script's stderr.
+		logger -s -t "$ACCOUNT" -p daemon.err "uid $ACCOUNT_UID belongs to another account; not starting"
+		return 1
+	fi
+	echo "$ACCOUNT:x:$ACCOUNT_UID:6000:Verso diagnostics plugin:/var/run/verso:/bin/false" >> /etc/passwd
+}
+
+start_service() {
+	account || return 1
+
+	# The socket, the status file and the record body live in a directory of
+	# the plugin's own, which only its account writes and the verso group reads.
+	mkdir -p "$DIR"
+	chown "$ACCOUNT:verso" "$DIR"
+	chmod 0750 "$DIR"
+
+	procd_open_instance ui
+	procd_set_param command /usr/bin/verso-plugin-diag
+	procd_set_param env VERSO_DIAG_SOCKET="$DIR/diag.sock" VERSO_DIAG_RUN_DIR="$DIR"
+	procd_set_param user "$ACCOUNT"
+	procd_set_param group verso
+	procd_set_param respawn 3600 5 5
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+
+	# The push loop runs only with a collector and a token. It runs as the
+	# plugin's account: reading sysfs and sending over HTTPS need no root.
+	local url token ca device_id
+	config_load verso_diag
+	config_get url collector url
+	config_get token collector token
+	config_get ca collector ca
+	config_get device_id collector device_id
+	[ -n "$url" ] && [ -n "$token" ] || return 0
+
+	procd_open_instance push
+	procd_set_param command /usr/bin/verso-plugin-diag push
+	procd_set_param env VERSO_DIAG_RUN_DIR="$DIR" VERSO_DIAG_URL="$url" VERSO_DIAG_TOKEN="$token" \
+		VERSO_DIAG_CA="$ca" VERSO_DIAG_DEVICE_ID="$device_id"
+	procd_set_param user "$ACCOUNT"
+	procd_set_param group verso
+	procd_set_param respawn 3600 5 5
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+}
+
+service_triggers() {
+	procd_add_reload_trigger verso_diag
+}

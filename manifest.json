@@ -1,0 +1,14 @@
+{
+  "id": "diag",
+  "name": "Mono feedback",
+  "socket": "/var/run/verso-plugin-diag/diag.sock",
+  "schema_version": 1,
+  "nav": [
+    {
+      "section": "System",
+      "label": "Mono feedback",
+      "path": "/",
+      "order": 90
+    }
+  ]
+}
