@@ -22,9 +22,13 @@ upload shows the device ID and what the last send did.
 
 ## Build and test
 
-Needs Rust (`rustup`, the toolchain Verso pins), a Verso checkout at
-`../verso` for the SDK, and for packaging the OpenWrt buildroot at
-`../openwrt` (its `apk` tool and signing key) and `fakeroot`.
+Check this repository out inside a Verso checkout, at
+`verso/plugins/verso-plugin-diagnostics-reporter`, like every other Verso plugin:
+the SDK is read from `../verso-plugin-sdk`. Needs Rust (`rustup`, the toolchain
+Verso pins), and for packaging the OpenWrt buildroot (its `apk` tool and
+signing key) and `fakeroot`. The buildroot is looked for at `../../../openwrt`
+(beside the Verso checkout); set `OPENWRT_DIR` in `local.mk` for another place.
+Do not build with `sudo`.
 
 ```sh
 make test

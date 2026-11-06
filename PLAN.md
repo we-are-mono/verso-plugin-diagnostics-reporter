@@ -494,8 +494,9 @@ client router. D13 options:
 Changes from the plan made during the implementation:
 
 - **17 sensors, 19 keys.** The plan said 16 and 18. The script has 17 sensor fields.
-- **Repository place.** The repo is `~/dev/mono/verso-plugin-diag`, and the SDK path
-  is `../verso/plugins/verso-plugin-sdk`. It is not checked out inside `verso/plugins/`.
+- **Repository place.** At first the repo was beside the Verso checkout, with the
+  SDK at `../verso/plugins/verso-plugin-sdk`. Since 2026-11-06 it is checked out
+  inside `verso/plugins/`, as planned, and the SDK path is `../verso-plugin-sdk`.
 - **Clock.** The schedule uses a monotonic clock, and the records use the wall clock.
   So when NTP sets the clock after boot, no sends bunch up and none are skipped
   (test `a_wall_clock_jump_does_not_move_the_schedule`).

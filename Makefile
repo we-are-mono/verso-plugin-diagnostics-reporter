@@ -17,7 +17,7 @@
 CARGO       ?= $(if $(wildcard $(HOME)/.cargo/bin/cargo),$(HOME)/.cargo/bin/cargo,cargo)
 TARGET      := aarch64-unknown-linux-musl
 BIN         := target/$(TARGET)/release/verso-plugin-diag
-OPENWRT_DIR ?= $(abspath ../openwrt)
+OPENWRT_DIR ?= $(abspath ../../../openwrt)
 APK         ?= $(OPENWRT_DIR)/staging_dir/host/bin/apk
 KEY         ?= $(OPENWRT_DIR)/private-key.pem
 VERSION     ?= 0.1.0

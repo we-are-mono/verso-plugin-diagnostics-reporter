@@ -3,12 +3,12 @@ name = "verso-plugin-diag"
 version = "0.1.0"
 edition = "2021"
 
-# The SDK is read from a Verso checkout beside this repository
-# (~/dev/mono/verso), so the plugin builds against the SDK of the shell it
-# ships with.
+# Like every Verso plugin repository, this one is checked out inside a Verso
+# checkout's plugins/ folder, beside the SDK, so the plugin builds against the
+# SDK of the shell it ships with.
 [dependencies]
 serde_json = "1"
-verso-plugin = { path = "../verso/plugins/verso-plugin-sdk" }
+verso-plugin = { path = "../verso-plugin-sdk" }
 
 [profile.release]
 opt-level = "z"
