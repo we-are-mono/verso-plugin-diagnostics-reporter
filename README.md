@@ -28,12 +28,20 @@ Needs Rust (`rustup`, the toolchain Verso pins), a Verso checkout at
 
 ```sh
 make test
-make apk COLLECTOR_URL=https://diag.example.com/d DIAG_TOKEN=<token>
+make apk DIAG_TOKEN=<token>
 ```
 
 `make apk` writes `build/verso-plugin-diag-<version>.apk` for `aarch64_generic`.
-Add `COLLECTOR_CA=path/to/ca.pem` when the collector's certificate is not from
-a CA in the router's `ca-bundle`. Set `VERSION` and `RELEASE` for a new build.
+The package sends to `https://diag.mono.si/d`; set `COLLECTOR_URL` for another
+collector. Add `COLLECTOR_CA=path/to/ca.pem` when the collector's certificate
+is not from a CA in the router's `ca-bundle`. Set `VERSION` and `RELEASE` for a
+new build.
+
+To keep the token off the command line, put it in `local.mk` (git ignores it):
+
+```make
+DIAG_TOKEN = <token>
+```
 
 The package holds the token. Treat every copy of it as holding the token.
 

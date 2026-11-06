@@ -4,11 +4,13 @@
 # verso-plugin-diag: build, test and package.
 #
 #   make test
-#   make apk COLLECTOR_URL=https://diag.example.com/d DIAG_TOKEN=secret
-#   make apk ... COLLECTOR_CA=path/to/ca.pem   # trust this CA, not ca-bundle
+#   make apk DIAG_TOKEN=secret                  # sends to diag.mono.si
+#   make apk ... COLLECTOR_URL=https://host/d   # another collector
+#   make apk ... COLLECTOR_CA=path/to/ca.pem    # trust this CA, not ca-bundle
 #
-# The package carries the token, so treat every copy of it as holding the
-# token. Only arm64: the sensors exist only on the Mono Gateway.
+# Put DIAG_TOKEN = <token> in local.mk (git ignores it) to leave it off the
+# command line. The package carries the token, so treat every copy of it as
+# holding the token. Only arm64: the sensors exist only on the Mono Gateway.
 
 -include local.mk
 
@@ -22,7 +24,7 @@ VERSION     ?= 0.1.0
 RELEASE     ?= 0
 VER         := $(VERSION)-r$(RELEASE)
 
-COLLECTOR_URL ?=
+COLLECTOR_URL ?= https://diag.mono.si/d
 DIAG_TOKEN    ?=
 COLLECTOR_CA  ?=
 CA_PATH       := /etc/verso-plugin-diag/ca.pem
