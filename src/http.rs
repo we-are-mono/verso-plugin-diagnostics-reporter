@@ -17,10 +17,11 @@ pub enum SendOutcome {
     Stored,
     /// The collector answered with another HTTP status.
     Rejected(u16),
-    /// The name did not resolve or the connection was refused.
-    Unreachable,
-    /// The TLS handshake failed or the certificate is not trusted.
-    Tls,
+    /// The name did not resolve or the connection was refused; curl's exit code.
+    Unreachable(i32),
+    /// The TLS handshake failed or the certificate is not trusted; curl's exit code.
+    Tls(i32),
+    /// curl exit 28.
     Timeout,
     /// curl ended with another exit code; -1 when it could not start.
     Failed(i32),
@@ -32,19 +33,21 @@ impl SendOutcome {
         match self {
             SendOutcome::Stored => "stored",
             SendOutcome::Rejected(_) => "rejected",
-            SendOutcome::Unreachable => "unreachable",
-            SendOutcome::Tls => "tls",
+            SendOutcome::Unreachable(_) => "unreachable",
+            SendOutcome::Tls(_) => "tls",
             SendOutcome::Timeout => "timeout",
             SendOutcome::Failed(_) => "failed",
         }
     }
 
-    /// The HTTP status of a rejection or curl's exit code of a failure.
+    /// The HTTP status of a rejection or curl's exit code of any other failure.
+    /// None for Stored, which is always 204.
     pub fn code(&self) -> Option<i64> {
         match self {
             SendOutcome::Rejected(status) => Some(*status as i64),
-            SendOutcome::Failed(exit) => Some(*exit as i64),
-            _ => None,
+            SendOutcome::Unreachable(exit) | SendOutcome::Tls(exit) | SendOutcome::Failed(exit) => Some(*exit as i64),
+            SendOutcome::Timeout => Some(28),
+            SendOutcome::Stored => None,
         }
     }
 }
@@ -154,9 +157,9 @@ pub fn outcome(exit: i32, stdout: &str) -> SendOutcome {
             Ok(status) => SendOutcome::Rejected(status),
             Err(_) => SendOutcome::Failed(0),
         },
-        6 | 7 => SendOutcome::Unreachable,
+        6 | 7 => SendOutcome::Unreachable(exit),
         28 => SendOutcome::Timeout,
-        35 | 51 | 53 | 54 | 58 | 59 | 60 | 66 | 77 | 80 | 83 | 90 | 91 => SendOutcome::Tls,
+        35 | 51 | 53 | 54 | 58 | 59 | 60 | 66 | 77 | 80 | 83 | 90 | 91 => SendOutcome::Tls(exit),
         other => SendOutcome::Failed(other),
     }
 }
@@ -200,10 +203,10 @@ mod tests {
         let cases = [
             (Ok((0, "204".to_string())), SendOutcome::Stored),
             (Ok((0, "401".to_string())), SendOutcome::Rejected(401)),
-            (Ok((7, "000".to_string())), SendOutcome::Unreachable),
-            (Ok((6, "000".to_string())), SendOutcome::Unreachable),
-            (Ok((60, "000".to_string())), SendOutcome::Tls),
-            (Ok((35, "000".to_string())), SendOutcome::Tls),
+            (Ok((7, "000".to_string())), SendOutcome::Unreachable(7)),
+            (Ok((6, "000".to_string())), SendOutcome::Unreachable(6)),
+            (Ok((60, "000".to_string())), SendOutcome::Tls(60)),
+            (Ok((35, "000".to_string())), SendOutcome::Tls(35)),
             (Ok((28, "000".to_string())), SendOutcome::Timeout),
             (Ok((2, "".to_string())), SendOutcome::Failed(2)),
             (Err("no curl".to_string()), SendOutcome::Failed(-1)),

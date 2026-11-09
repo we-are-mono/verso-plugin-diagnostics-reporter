@@ -281,7 +281,7 @@ mod tests {
     #[test]
     fn the_status_follows_each_send() {
         let (t, clock) = (dk::tree(), FakeClock::new());
-        let answers = vec![SendOutcome::Stored, SendOutcome::Unreachable];
+        let answers = vec![SendOutcome::Stored, SendOutcome::Unreachable(7)];
         let sender = FakeSender::new(&clock, answers, Duration::ZERO);
         run(&settings(), &t.fs(), &sender, &clock, &t.root, Some(3));
         let s = status::read(&t.root).unwrap();
@@ -289,6 +289,7 @@ mod tests {
         assert_eq!(s.collector, "https://diag.example.com/d");
         assert_eq!((s.sent, s.failed), (1, 2));
         assert_eq!(s.last_outcome.as_deref(), Some("unreachable"));
+        assert_eq!(s.last_code, Some(7));
     }
 
     #[test]

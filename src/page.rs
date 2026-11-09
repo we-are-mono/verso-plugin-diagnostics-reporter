@@ -120,7 +120,7 @@ fn result(word: &str, code: Option<i64>) -> Property {
     let row = Property { label: "Last result".into(), value: value.into(), ..Default::default() }.marked(tone);
     match (word, code) {
         ("rejected", Some(c)) => row.noted(&format!("HTTP {c}")),
-        ("failed", Some(c)) if c >= 0 => row.noted(&format!("curl exit {c}")),
+        ("unreachable" | "tls" | "timeout" | "failed", Some(c)) if c >= 0 => row.noted(&format!("curl exit {c}")),
         _ => row,
     }
 }
@@ -242,6 +242,18 @@ mod tests {
         assert_eq!(result["value"], "Refused by the collector");
         assert_eq!(result["help"], "HTTP 401");
         assert_eq!(result["dot"], "danger");
+    }
+
+    #[test]
+    fn a_tls_failure_carries_curls_exit_code() {
+        let mut s = running();
+        s.last_outcome = Some("tls".into());
+        s.last_code = Some(60);
+        let v = render(Some(s));
+        let props = section(&v).iter().find(|w| w["type"] == "properties").unwrap();
+        let result = &props["items"][3];
+        assert_eq!(result["value"], "Collector certificate not trusted");
+        assert_eq!(result["help"], "curl exit 60");
     }
 
     #[test]

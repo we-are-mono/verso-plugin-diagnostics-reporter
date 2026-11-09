@@ -2,8 +2,8 @@
 
 A Verso plugin for the Mono Gateway. It reads the board's sensors every 15
 minutes and sends one JSON record to `mono-collector` over HTTPS, with the
-same keys as `mono-diagnostics-collector/thermal_logger.sh`. System › Sensor
-upload shows the device ID and what the last send did.
+same keys as `mono-diagnostics-collector/thermal_logger.sh`. System › Mono
+feedback shows the device ID and what the last send did.
 
 - Design, decisions and evidence: [PLAN.md](PLAN.md)
 - What to send to clients: [CLIENT.md](CLIENT.md)

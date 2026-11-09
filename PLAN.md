@@ -219,7 +219,7 @@ pub fn from_env(env: &dyn Fn(&str) -> Option<String>) -> Result<PushSettings, Se
 ### http.rs
 
 ```rust
-pub enum SendOutcome { Stored, Rejected(u16), Unreachable, Tls, Timeout, Failed(i32) }
+pub enum SendOutcome { Stored, Rejected(u16), Unreachable(i32), Tls(i32), Timeout, Failed(i32) }
 pub trait Sender { fn send(&self, body: &str) -> SendOutcome; }
 
 /// Runs one program with argv and stdin; returns exit code and stdout.
@@ -366,7 +366,7 @@ These are rows of this plan, not tickets in a tracker.
 ### T3 test cases (outline)
 
 - `CurlSender` with a fake `Runner`: (0, "204") → Stored; (0, "401") → Rejected(401);
-  exit 7 → Unreachable; exit 60 → Tls; exit 28 → Timeout; exit 2 → Failed(2).
+  exit 7 → Unreachable(7); exit 60 → Tls(60); exit 28 → Timeout; exit 2 → Failed(2).
 - The fake `Runner` sees: no token in argv; the token header and the url on stdin;
   `--proto =https` in argv; `record.json` holds the exact body, mode 0600.
 - One manual check against the real collector over HTTPS (in T5): 204 is Stored,
