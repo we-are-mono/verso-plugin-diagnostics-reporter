@@ -22,6 +22,19 @@ refuses "https://x/d" 'a"b'
 refuses "https://x/d" "a b"
 refuses "https://x/'d" "abc"
 refuses 'https://x/$d' "abc"
+# A line break, which a line-by-line grep does not see.
+refuses "https://x/d" "abc
+def"
+refuses "https://x/d
+y" "abc"
+
+# The length limits of src/settings.rs.
+long_url="https://"
+while [ "${#long_url}" -le 2048 ]; do long_url="${long_url}a"; done
+refuses "$long_url" "abc"
+long_token=
+while [ "${#long_token}" -le 256 ]; do long_token="a$long_token"; done
+refuses "https://x/d" "$long_token"
 
 if sh packaging/make-config.sh "https://diag.example.com/d" "Super.Secret-Key" "" "$dir/out"; then
 	grep -qx "	option url 'https://diag.example.com/d'" "$dir/out" || { echo "FAIL: url line"; fails=$((fails + 1)); }
