@@ -78,7 +78,13 @@ impl Runner for ProcessRunner {
             .spawn()
             .map_err(|e| format!("{exe}: {e}"))?;
         if let Some(mut input) = child.stdin.take() {
-            input.write_all(stdin.as_bytes()).map_err(|e| e.to_string())?;
+            if let Err(e) = input.write_all(stdin.as_bytes()) {
+                // The child is still collected: the push loop outlives it and a
+                // zombie per failed send would grow without bound.
+                let _ = child.kill();
+                let _ = child.wait();
+                return Err(e.to_string());
+            }
         }
         let output = child.wait_with_output().map_err(|e| e.to_string())?;
         Ok((output.status.code().unwrap_or(-1), String::from_utf8_lossy(&output.stdout).into_owned()))
@@ -105,7 +111,12 @@ impl CurlSender {
     fn argv(&self) -> Vec<String> {
         let body = format!("@{}", self.body_path().display());
         [
-            "-K", "-", "-s", "-m", "10", "--proto", "=https", "-o", "/dev/null", "-w", "%{http_code}",
+            // -q first: curl then never reads the account's ~/.curlrc. The account's
+            // home is the shared /var/run/verso, which any verso-group process can
+            // write, so a planted curlrc (`insecure`, `proxy`) must not apply.
+            // -s drops the progress meter; -S keeps curl's error messages, so
+            // the reason for a failed send reaches the system log.
+            "-q", "-K", "-", "-s", "-S", "-m", "10", "--proto", "=https", "-o", "/dev/null", "-w", "%{http_code}",
             "--data-binary", &body,
         ]
         .iter()
@@ -228,6 +239,24 @@ mod tests {
         assert!(stdin.contains("header = \"X-Diag-Token: SuperSecretKey\"\n"));
         assert!(stdin.contains("header = \"Content-Type: application/json\"\n"));
         assert!(!stdin.contains("cacert"));
+    }
+
+    #[test]
+    fn curl_never_reads_a_curlrc() {
+        let (s, seen, _t) = sender(Ok((0, "204".into())), "");
+        s.send("{}");
+        let argv = seen.lock().unwrap()[0].1.clone();
+        // Only as the first option does -q keep curl off ~/.curlrc.
+        assert_eq!(argv[0], "-q");
+    }
+
+    #[test]
+    fn curl_reports_its_errors() {
+        let (s, seen, _t) = sender(Ok((0, "204".into())), "");
+        s.send("{}");
+        let argv = seen.lock().unwrap()[0].1.clone();
+        // -s alone also silences the error messages; -S brings them back.
+        assert!(argv.iter().any(|a| a == "-S"));
     }
 
     #[test]
